@@ -9,7 +9,7 @@
 #include "SmartDashboardNames.h"
 
 // WpiLib
-#include "frc/SmartDashboard/SmartDashboard.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 SnobotClimber::SnobotClimber(const std::shared_ptr<frc::SpeedController>& aClimbingMotor, const std::shared_ptr<IOperatorJoystick>& aJoystick, const std::shared_ptr<ILogger>& aLogger) :
         mClimbingMotor(aClimbingMotor), mJoystick(aJoystick), mLogger(aLogger),

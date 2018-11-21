@@ -9,7 +9,7 @@
 #include "SmartDashboardNames.h"
 
 // WpiLib
-#include "frc/SmartDashboard/SmartDashboard.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 SnobotDriverJoystick::SnobotDriverJoystick(const std::shared_ptr<frc::Joystick>& aJoystick, const std::shared_ptr<ILogger>& aLogger) :
         mJoystick(aJoystick), mLogger(aLogger)

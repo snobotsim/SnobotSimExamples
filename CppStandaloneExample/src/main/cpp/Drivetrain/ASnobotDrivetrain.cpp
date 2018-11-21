@@ -9,7 +9,7 @@
 #include "SmartDashboardNames.h"
 
 // WpiLib
-#include "frc/SmartDashboard/SmartDashboard.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 ASnobotDrivetrain::ASnobotDrivetrain(
         const std::shared_ptr<frc::SpeedController>& aLeftMotor,

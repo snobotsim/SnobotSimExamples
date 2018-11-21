@@ -9,7 +9,7 @@
 #include "SmartDashboardNames.h"
 
 // WpiLib
-#include "frc/SmartDashboard/SmartDashboard.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 
 const frc::DoubleSolenoid::Value SnobotGearBoss::sGEAR_DOWN_VALUE = frc::DoubleSolenoid::kForward;

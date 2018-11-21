@@ -10,7 +10,7 @@
 #include <math.h>
 
 // WpiLib
-#include "frc/SmartDashboard/SmartDashboard.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 SnobotPositioner::SnobotPositioner(const std::shared_ptr<IDrivetrain>& aDriveTrain, const std::shared_ptr<frc::Gyro>& aGyro, const std::shared_ptr<ILogger>& aLogger) :
         mDriveTrain(aDriveTrain),

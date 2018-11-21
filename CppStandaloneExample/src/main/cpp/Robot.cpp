@@ -58,7 +58,7 @@ void Robot::RobotInit()
 #ifdef STANDALONE_SNOBOT_SIM
     #include "SnobotSim/StartStandaloneSimulatorMacro.h"
     // Note that the config path is up a couple directories, since it gets run from build/install/desktopProgram/release/libs
-    START_STANDALONE_SIMULATOR(Robot, SnobotSim::AStandaloneSimulator, "../../../../../simulator_config/simulator_config.yml")
+    START_STANDALONE_SIMULATOR(Robot, SnobotSim::AStandaloneSimulator)
 #else
     #ifndef RUNNING_FRC_TESTS
     START_ROBOT_CLASS(Robot)

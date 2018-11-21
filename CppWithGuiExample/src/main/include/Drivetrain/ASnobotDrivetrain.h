@@ -14,7 +14,7 @@
 
 // WpiLIb
 #include "frc/SpeedController.h"
-#include "frc/Drive/DifferentialDrive.h"
+#include "frc/drive/DifferentialDrive.h"
 
 class ASnobotDrivetrain: public IDrivetrain
 {

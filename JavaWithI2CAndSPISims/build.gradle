@@ -2,7 +2,7 @@
 buildscript
 {
     dependencies {
-        classpath files('C:/Users/PJ/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-0.0.0/SnobotSimulatorPlugin-2019-0.0.0.jar')
+        classpath files(System.getProperty("user.home") + '/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-0.0.0/SnobotSimulatorPlugin-2019-0.0.0.jar')
     }
 }
 
