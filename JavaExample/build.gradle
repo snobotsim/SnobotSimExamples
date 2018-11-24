@@ -1,16 +1,10 @@
 
-buildscript
-{
-    dependencies {
-        classpath files(System.getProperty("user.home") + '/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-0.0.0/SnobotSimulatorPlugin-2019-0.0.0.jar')
-    }
-}
-
 
 plugins {
     id "java"
     id "eclipse"
     id "edu.wpi.first.GradleRIO" version "2019.1.1-beta-1"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.0.0" apply false
 }
 repositories {
     maven { url "http://first.wpi.edu/FRC/roborio/maven/release/" }

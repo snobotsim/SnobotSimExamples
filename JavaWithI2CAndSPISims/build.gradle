@@ -8,11 +8,15 @@ buildscript
 
 plugins {
     id "java"
+    id "eclipse"
     id "edu.wpi.first.GradleRIO" version "2019.1.1-beta-1"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.0.0" apply false
 }
 repositories {
     maven { url "http://first.wpi.edu/FRC/roborio/maven/release/" }
 }
+
+apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
 
 def ROBOT_CLASS = "frc.robot.Robot"
 
