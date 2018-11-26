@@ -1,6 +1,7 @@
 
 import os
 import re
+import sys
 import subprocess
 
 
@@ -72,6 +73,8 @@ def main():
 
     print("Failed %s" % failures)
     print("Warnings %s" % warnings)
+    
+    sys.exit(len(failures))
 
 
 if __name__ == "__main__":
