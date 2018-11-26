@@ -59,14 +59,16 @@ def check_versions(project):
 
 def main():
 	
-    projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git"]
+    projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git" and d != "build"]
 
     failures = []
     warnings = []
+    use_shell = sys.platform == 'win32'
     for project in projects:
         os.chdir(project)
-        args = ["gradlew", "build"]
-        if subprocess.call(args, shell=True) != 0:
+        if "cpp" in project.lower():
+            subprocess.call(["gradlew", "installToolchain"], shell=use_shell)
+        if subprocess.call(["gradlew", "build"], shell=use_shell) != 0:
             failures.append(project)
         elif not check_versions(project):
             warnings.append(project)
