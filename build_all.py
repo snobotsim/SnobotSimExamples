@@ -64,11 +64,12 @@ def main():
     failures = []
     warnings = []
     use_shell = sys.platform == 'win32'
+    gradle_command = "gradlew" if sys.platform == 'win32' else "./gradlew"
     for project in projects:
         os.chdir(project)
         if "cpp" in project.lower():
-            subprocess.call(["gradlew", "installToolchain"], shell=use_shell)
-        if subprocess.call(["gradlew", "build"], shell=use_shell) != 0:
+            subprocess.call([gradle_command, "installToolchain"], shell=use_shell)
+        if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
             failures.append(project)
         elif not check_versions(project):
             warnings.append(project)
@@ -81,3 +82,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
