@@ -38,4 +38,4 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - python3.5 build_all.py
+  - python build_all.py
