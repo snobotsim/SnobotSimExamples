@@ -1,6 +1,8 @@
 
 package com.snobot.sim;
 
+import java.util.Arrays;
+
 import com.snobot.simulator.module_wrapper.ASensorWrapper;
 import com.snobot.simulator.module_wrapper.interfaces.ISpiWrapper;
 
@@ -12,6 +14,7 @@ public class DotstarSim extends ASensorWrapper implements ISpiWrapper, ConstBuff
 {
     protected final SPISim mWpiWrapper;
     protected final CallbackStore mWriteStore;
+    protected byte[] mLastWrite;
 
     public DotstarSim(int aPort)
     {
@@ -23,13 +26,20 @@ public class DotstarSim extends ASensorWrapper implements ISpiWrapper, ConstBuff
     }
 
     @Override
-    public void callback(String name, byte[] buffer, int count) {
-        // System.out.println("Getting callback..." + name + ", " + Arrays.toString(buffer));
+    public void callback(String aName, byte[] aBuffer, int aCount) 
+    {
+        mLastWrite = Arrays.copyOf(aBuffer, aCount);
     }
     
+    @Override
     public void close() throws Exception
     {
         super.close();
         mWriteStore.close();
+    }
+
+    public byte[] getLastWrite()
+    {
+        return mLastWrite;
     }
 }

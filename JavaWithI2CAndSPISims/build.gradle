@@ -59,6 +59,9 @@ sourceSets {
 // and NavX.
 dependencies {
     compile wpilib()
+    
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
 
     // This is always required for SnobotSim to run
     snobotSimCompile snobotSimJava()
@@ -68,9 +71,8 @@ dependencies {
     simulatorExtensionsCompile wpilib()
     simulatorExtensionsCompile sourceSets.main.output
 
-    // TODO: Hack. I haven't dug into VSCode to see why it loses intellisense if this isn't here.
-    // It should build without this, but VSCode will put a lot of red lines in the simulator code
-    // compile snobotSimJava()
+    testCompile snobotSimJava()
+    testCompile sourceSets.simulatorExtensions.output
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -79,6 +81,14 @@ dependencies {
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(Test) {
+    systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
 }
 
 // Force Java 8 Compatibility mode for deployed code, in case the develoment
@@ -90,6 +100,10 @@ compileJava {
 
 /////////////////////////////////////////////////////
 // Snobot Sim
+
+// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
+// but since this is shared I have it in a more centralized location
+apply from: "../styleguide/java_style.gradle"
 
 // You need to jar up the files in order for SnobotSim to know about your special classes. The task name has to be exactly this
 task simulatorExtensionJar(type: Jar) {
