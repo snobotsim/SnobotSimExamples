@@ -59,7 +59,7 @@ def check_versions(project):
 
 def main():
 	
-    projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git" and d != "build"]
+    projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git" and d != "build" and d != "styleguide"]
 
     failures = []
     warnings = []

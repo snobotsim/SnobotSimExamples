@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
  */
 public class OI
 {
-    private XboxController mDriverJoystick;
+    private final XboxController mDriverJoystick;
 
     public OI()
     {
