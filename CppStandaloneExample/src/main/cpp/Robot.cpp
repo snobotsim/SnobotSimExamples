@@ -60,6 +60,7 @@ void Robot::RobotInit()
 }
 
 
+
 #ifdef STANDALONE_SNOBOT_SIM
     #include "SnobotSim/StartStandaloneSimulatorMacro.h"
     // Note that the config path is up a couple directories, since it gets run from build/install/desktopProgram/release/libs

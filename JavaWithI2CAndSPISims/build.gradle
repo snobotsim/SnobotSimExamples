@@ -1,23 +1,16 @@
-
 plugins {
     id "java"
-    id "eclipse"
-    id "edu.wpi.first.GradleRIO" version "2019.1.1-beta-1"
+    id "edu.wpi.first.GradleRIO" version "2019.1.1-beta-2a"
     id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.0.0" apply false
 }
-repositories {
-    maven { url "http://first.wpi.edu/FRC/roborio/maven/release/" }
-}
 
-apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
-
-def ROBOT_CLASS = "frc.robot.Robot"
+def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
     targets {
-        target("roborio", edu.wpi.first.gradlerio.frc.RoboRIO) {
+        roboRIO("roborio") {
             // Team number is loaded either from the .wpilib/wpilib_preferences.json
             // or from command line. If not found an exception will be thrown.
             // You can use getTeamOrDefault(team) instead of getTeamNumber if you
@@ -26,21 +19,36 @@ deploy {
         }
     }
     artifacts {
-        artifact('frcJava', edu.wpi.first.gradlerio.frc.FRCJavaArtifact) {
+        frcJavaArtifact('frcJava') {
             targets << "roborio"
             // Debug can be overridden by command line, for use with VSCode
             debug = getDebugOrDefault(false)
         }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'src/main/deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
     }
 }
 
-configurations {
-    snobotSimCompile
+// Maven central needed for JUnit
+repositories {
+    mavenCentral()
+    maven { url "http://first.wpi.edu/FRC/roborio/maven/release/" }
 }
 
 /////////////////////////////////////////////////////
 // Snobot Sim
+
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
+
+configurations {
+    snobotSimCompile
+}
 
 // If you have your own simulator code, you must tell GradleRio that you want that code compiled.
 // The recommended way to do it is to create a new source set, just for this, and jar it up later
@@ -55,13 +63,13 @@ sourceSets {
 // End Snobot Sim
 /////////////////////////////////////////////////////
 
-// Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
-// and NavX.
+// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+// Also defines JUnit 4.
 dependencies {
     compile wpilib()
-    
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    compile javaVendorLibraries()
+    nativeZip jniRoboRIOVendorLibraries()
+    nativeDesktopZip jniDesktopVendorLibraries()
 
     // This is always required for SnobotSim to run
     snobotSimCompile snobotSimJava()
@@ -70,7 +78,9 @@ dependencies {
     simulatorExtensionsCompile snobotSimJava()
     simulatorExtensionsCompile wpilib()
     simulatorExtensionsCompile sourceSets.main.output
-
+    
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
     testCompile snobotSimJava()
     testCompile sourceSets.simulatorExtensions.output
 }
@@ -79,8 +89,8 @@ dependencies {
 // in order to make them all available at runtime. Also adding the manifest so WPILib
 // knows where to look for our Robot Class.
 jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
 
 test {
@@ -89,13 +99,6 @@ test {
 
 tasks.withType(Test) {
     systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
-}
-
-// Force Java 8 Compatibility mode for deployed code, in case the develoment
-// system is using Java 10.
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
 }
 
 /////////////////////////////////////////////////////

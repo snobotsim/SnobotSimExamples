@@ -24,7 +24,7 @@ def check_versions(project):
 
     success = True
 
-    expected_gradlerio_version = "2019.1.1-beta-1"
+    expected_gradlerio_version = "2019.1.1-beta-2a"
     expected_snobotsim_version = "2019-0.0.0"
     expected_wpilib_version = "2019.1.1-beta-2"
 
