@@ -1,0 +1,41 @@
+language: java
+
+matrix:
+  include:
+  - os: linux
+    sudo: required
+    dist: xenial
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - g++-6
+
+  - os: osx
+    osx_image: xcode8
+
+notifications:
+  email: false
+
+before_install:
+  - |
+         if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+            echo "Skipping"
+         else
+            mkdir build
+            wget "https://download.java.net/java/ga/jdk11/openjdk-11_osx-x64_bin.tar.gz" -O "build/jdk.tar.gz"
+            sudo tar xvzf build/jdk.tar.gz -C /Library/Java/JavaVirtualMachines/
+            export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/
+         fi;
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+script:
+  - python build_all.py

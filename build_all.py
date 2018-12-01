@@ -1,6 +1,7 @@
 
 import os
 import re
+import sys
 import subprocess
 
 
@@ -23,7 +24,7 @@ def check_versions(project):
 
     success = True
 
-    expected_gradlerio_version = "2019.1.1-beta-1"
+    expected_gradlerio_version = "2019.1.1-beta-2a"
     expected_snobotsim_version = "2019-0.0.0"
     expected_wpilib_version = "2019.1.1-beta-2"
 
@@ -58,21 +59,27 @@ def check_versions(project):
 
 def main():
 	
-    projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git"]
+    projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git" and d != "build" and d != "styleguide"]
 
     failures = []
     warnings = []
+    use_shell = sys.platform == 'win32'
+    gradle_command = "gradlew" if sys.platform == 'win32' else "./gradlew"
     for project in projects:
         os.chdir(project)
-        args = ["gradlew", "build"]
-        if subprocess.call(args, shell=True) != 0:
+        if "cpp" in project.lower():
+            subprocess.call([gradle_command, "installToolchain"], shell=use_shell)
+        if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
             failures.append(project)
         elif not check_versions(project):
             warnings.append(project)
 
     print("Failed %s" % failures)
     print("Warnings %s" % warnings)
+    
+    sys.exit(len(failures))
 
 
 if __name__ == "__main__":
     main()
+

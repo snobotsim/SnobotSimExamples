@@ -1,0 +1,80 @@
+plugins {
+    id "java"
+    id "edu.wpi.first.GradleRIO" version "2019.1.1-beta-2a"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.0.0" apply false
+}
+
+def ROBOT_MAIN_CLASS = "frc.robot.Main"
+
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project EmbeddedTools.
+deploy {
+    targets {
+        roboRIO("roborio") {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = getTeamNumber()
+        }
+    }
+    artifacts {
+        frcJavaArtifact('frcJava') {
+            targets << "roborio"
+            // Debug can be overridden by command line, for use with VSCode
+            debug = getDebugOrDefault(false)
+        }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'src/main/deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
+    }
+}
+
+// Maven central needed for JUnit
+repositories {
+    mavenCentral()
+    maven { url "http://first.wpi.edu/FRC/roborio/maven/release/" }
+}
+
+/////////////////////////////////////////////////////
+// Snobot Sim
+apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
+
+configurations {
+    snobotSimCompile
+}
+
+// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
+// but since this is shared I have it in a more centralized location
+apply from: "../styleguide/java_style.gradle"
+// End Snobot Sim
+/////////////////////////////////////////////////////
+
+// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+// Also defines JUnit 4.
+dependencies {
+    compile wpilib()
+    compile javaVendorLibraries()
+    nativeZip jniRoboRIOVendorLibraries()
+    nativeDesktopZip jniDesktopVendorLibraries()
+    testCompile 'junit:junit:4.12'
+
+    snobotSimCompile snobotSimJava()
+}
+
+// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
+// in order to make them all available at runtime. Also adding the manifest so WPILib
+// knows where to look for our Robot Class.
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+}
+
+wrapper {
+    gradleVersion = '4.9'
+}

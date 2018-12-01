@@ -1,0 +1,37 @@
+version: 1.0.{build}
+image: Visual Studio 2015
+
+platform:
+- x86
+- x64
+
+build_script:
+- ps: >-
+    mkdir build
+
+    $ProgressPreference = 'SilentlyContinue'
+
+    if ($env:PLATFORM -eq "x86") {
+      echo "32 Bit"
+
+      wget "https://github.com/wpilibsuite/frc-openjdk-windows/releases/download/v11.0.0u28-1/jdk-x86-11.0.0u28-1.zip" -O "build\jdk.zip"
+
+      $Env:JAVA_HOME = "$pwd/build/jdkinst/jdk"
+    }
+    else {
+      echo "64 bit"
+
+      wget "https://download.java.net/java/ga/jdk11/openjdk-11_windows-x64_bin.zip" -O "build\jdk.zip"
+
+      $Env:JAVA_HOME = "$pwd/build/jdkinst/jdk-11"
+    }
+    Expand-Archive build\jdk.zip -DestinationPath build/jdkinst
+
+    dir
+
+    dir build
+
+    dir build\jdkinst
+
+- cmd: "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+- cmd: python build_all.py
