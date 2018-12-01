@@ -10,7 +10,5 @@
     ".classpath": true,
     ".project": true
   },
-  "wpilib.online": true,
-  "checkstyle.configurationFile": "../styleguide/checkstyle.xml",
-  "checkstyle.autocheck": true
+  "wpilib.online": true
 }

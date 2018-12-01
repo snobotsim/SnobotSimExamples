@@ -1,3 +1,9 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
 #include "Robot.h"
 
@@ -14,7 +20,7 @@
 #include "frc/Talon.h"
 
 
-void Robot::RobotInit()
+void Robot::RobotInit() 
 {
     std::shared_ptr<ILogger> logger(new SnobotLogger);
 
@@ -54,13 +60,12 @@ void Robot::RobotInit()
 }
 
 
-
 #ifdef STANDALONE_SNOBOT_SIM
     #include "SnobotSim/StartStandaloneSimulatorMacro.h"
     // Note that the config path is up a couple directories, since it gets run from build/install/desktopProgram/release/libs
     START_STANDALONE_SIMULATOR(Robot, SnobotSim::AStandaloneSimulator)
 #else
     #ifndef RUNNING_FRC_TESTS
-    START_ROBOT_CLASS(Robot)
+    int main() { return frc::StartRobot<Robot>(); }
     #endif
 #endif
