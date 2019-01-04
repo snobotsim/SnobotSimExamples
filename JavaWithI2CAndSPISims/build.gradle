@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.0.0" apply false
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.1.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -78,7 +78,7 @@ dependencies {
 
     // This is required only if you are adding a custom simulator.
     simulatorExtensionsCompile snobotSimJava()
-    simulatorExtensionsCompile wpilib()
+    simulatorExtensionsCompile wpi.deps.wpilib()
     simulatorExtensionsCompile sourceSets.main.output
     
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'

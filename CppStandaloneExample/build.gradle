@@ -2,7 +2,7 @@ plugins {
     id "cpp"
     id "google-test-test-suite"
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.0.0" apply false
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.1.0" apply false
 }
 
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
