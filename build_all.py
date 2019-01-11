@@ -66,6 +66,12 @@ def main():
     use_shell = sys.platform == 'win32'
     gradle_command = "gradlew" if sys.platform == 'win32' else "./gradlew"
     for project in projects:
+        print("Running project '" + project + "'")
+        
+        # TODO - temporary
+        if "CppWithGuiExample" in project:
+            continue
+        
         os.chdir(project)
         if "cpp" in project.lower():
             subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
