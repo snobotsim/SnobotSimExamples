@@ -24,9 +24,9 @@ def check_versions(project):
 
     success = True
 
-    expected_gradlerio_version = "2019.1.1-beta-2a"
-    expected_snobotsim_version = "2019-0.0.0"
-    expected_wpilib_version = "2019.1.1-beta-2"
+    expected_gradlerio_version = "2019.1.1"
+    expected_snobotsim_version = "2019-0.2.0"
+    expected_wpilib_version = "2019.1.1"
 
     found_gradlerio_version = None
     found_snobotsim_version = None
@@ -35,7 +35,7 @@ def check_versions(project):
     with open("build.gradle") as f:
         for line in f.readlines():
             line = line.strip()
-            gradle_rio_success, found_gradlerio_version = check_regex(r"edu.wpi.first.GradleRIO.*?([0-9]+\.[0-9]+\.[0-9]+-.*)\"", line, found_gradlerio_version)
+            gradle_rio_success, found_gradlerio_version = check_regex(r"edu.wpi.first.GradleRIO.*?([0-9]+\.[0-9]+\.[0-9])\"", line, found_gradlerio_version)
             snobot_sim_success, found_snobotsim_version = check_regex(r"SnobotSimulatorPlugin.*?([0-9]+-[0-9]+\.[0-9]+\.[0-9]+)", line, found_snobotsim_version)
             wpilib_success, found_wpilib_version = check_regex(r"""wpilibVersion *=? *(?:'|")(.*)(?:'|")""", line, found_wpilib_version)
 
@@ -66,9 +66,15 @@ def main():
     use_shell = sys.platform == 'win32'
     gradle_command = "gradlew" if sys.platform == 'win32' else "./gradlew"
     for project in projects:
+        print("Running project '" + project + "'")
+        
+        # TODO - temporary
+        if "CppWithGuiExample" in project:
+            continue
+        
         os.chdir(project)
         if "cpp" in project.lower():
-            subprocess.call([gradle_command, "installToolchain"], shell=use_shell)
+            subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
         if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
             failures.append(project)
         elif not check_versions(project):
