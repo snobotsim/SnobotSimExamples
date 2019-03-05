@@ -24,29 +24,29 @@ def check_versions(project):
 
     success = True
 
-    expected_gradlerio_version = "2019.1.1"
-    expected_snobotsim_version = "2019-0.2.0"
+    expected_gradlerio_version = "2019.4.1"
+    expected_snobotsim_version = "2019-2.0.0"
     expected_wpilib_version = "2019.1.1"
 
     found_gradlerio_version = None
-    found_snobotsim_version = None
+    found_snobotsim_plugin_version = None
     found_wpilib_version = None
 
     with open("build.gradle") as f:
         for line in f.readlines():
             line = line.strip()
             gradle_rio_success, found_gradlerio_version = check_regex(r"edu.wpi.first.GradleRIO.*?([0-9]+\.[0-9]+\.[0-9])\"", line, found_gradlerio_version)
-            snobot_sim_success, found_snobotsim_version = check_regex(r"SnobotSimulatorPlugin.*?([0-9]+-[0-9]+\.[0-9]+\.[0-9]+)", line, found_snobotsim_version)
+            snobot_sim_plugin_success, found_snobotsim_plugin_version = check_regex(r"SnobotSimulatorPlugin.*?([0-9]+-[0-9]+\.[0-9]+\.[0-9]+)", line, found_snobotsim_plugin_version)
             wpilib_success, found_wpilib_version = check_regex(r"""wpilibVersion *=? *(?:'|")(.*)(?:'|")""", line, found_wpilib_version)
 
-            success = success and (gradle_rio_success and snobot_sim_success and wpilib_success)
+            success = success and (gradle_rio_success and snobot_sim_plugin_success and wpilib_success)
 
     if found_gradlerio_version != expected_gradlerio_version:
         print("  Unexpected GradleRIO version '%s' (%s)" % (found_gradlerio_version, expected_gradlerio_version))
         success = False
 
-    if found_snobotsim_version != expected_snobotsim_version:
-        print("  Unexpected SnobotSim version '%s' (%s)" % (found_snobotsim_version, expected_snobotsim_version))
+    if found_snobotsim_plugin_version != expected_snobotsim_version:
+        print("  Unexpected SnobotSim plugin version '%s' (%s)" % (found_snobotsim_plugin_version, expected_snobotsim_version))
         success = False
         
     # This one doesn't have to be manually specified, so call not specifying it OK

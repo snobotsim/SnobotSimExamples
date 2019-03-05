@@ -3,6 +3,8 @@ package com.snobot.sim;
 
 import com.snobot.simulator.ASimulator;
 import com.snobot.simulator.SensorActuatorRegistry;
+import com.snobot.simulator.robot_container.IRobotClassContainer;
+import com.snobot.simulator.robot_container.JavaRobotContainer;
 import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 import com.snobot.simulator.wrapper_accessors.java.JavaI2CWrapperAccessor;
 import com.snobot.simulator.wrapper_accessors.java.JavaSpiWrapperAccessor;
@@ -33,6 +35,12 @@ public class Snobot2018Simulator extends ASimulator
         
         JavaI2CWrapperAccessor i2cAccessor = (JavaI2CWrapperAccessor) DataAccessorFactory.getInstance().getI2CAccessor();
         i2cAccessor.setI2CFactory(new SnobotI2CFactory());
+    }
+    
+    @Override
+    public void setRobot(IRobotClassContainer aRobot)
+    {
+        setRobot((Robot) ((JavaRobotContainer) aRobot).getJavaRobot());
     }
 
     public void setRobot(Robot aRobot)

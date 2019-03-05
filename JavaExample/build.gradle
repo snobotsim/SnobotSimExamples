@@ -1,7 +1,7 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2019.1.1"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.2.0" apply false
+    id "edu.wpi.first.GradleRIO" version "2019.4.1"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-2.0.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -47,10 +47,6 @@ repositories {
 // Snobot Sim
 
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
-
-configurations {
-    snobotSimCompile
-}
 
 // This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
 // but since this is shared I have it in a more centralized location

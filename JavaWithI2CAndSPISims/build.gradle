@@ -1,7 +1,7 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2019.1.1"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.2.0" apply false
+    id "edu.wpi.first.GradleRIO" version "2019.4.1"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-2.0.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -46,11 +46,6 @@ repositories {
 /////////////////////////////////////////////////////
 // Snobot Sim
 
-apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
-
-configurations {
-    snobotSimCompile
-}
 
 // If you have your own simulator code, you must tell GradleRio that you want that code compiled.
 // The recommended way to do it is to create a new source set, just for this, and jar it up later
@@ -62,6 +57,9 @@ sourceSets {
         }
     }
 }
+
+apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
+
 // End Snobot Sim
 /////////////////////////////////////////////////////
 
@@ -80,6 +78,7 @@ dependencies {
     simulatorExtensionsCompile snobotSimJava()
     simulatorExtensionsCompile wpi.deps.wpilib()
     simulatorExtensionsCompile sourceSets.main.output
+    snobotSimCompile sourceSets.simulatorExtensions.output
     
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
@@ -103,20 +102,7 @@ tasks.withType(Test) {
     systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
 }
 
-/////////////////////////////////////////////////////
-// Snobot Sim
-
 // This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
 // but since this is shared I have it in a more centralized location
 apply from: "../styleguide/java_style.gradle"
 
-// You need to jar up the files in order for SnobotSim to know about your special classes. The task name has to be exactly this
-task simulatorExtensionJar(type: Jar) {
-    baseName = "SnobotSimExtensions"
-    from sourceSets.simulatorExtensions.output
-}
-
-// This helps the plugin work easier... Whenever you build your jar, build your extension too (if it is out of date)
-jar.dependsOn simulatorExtensionJar 
-// End Snobot Sim
-/////////////////////////////////////////////////////

@@ -39,7 +39,7 @@ public class PixyCamSim extends ASensorWrapper implements II2CWrapper, BufferCal
     }
     
     @Override
-    public void callback(String aName, byte[] aBuffer, int aCount) 
+    public synchronized void callback(String aName, byte[] aBuffer, int aCount) 
     {
         ByteBuffer buffer = ByteBuffer.wrap(aBuffer);
 
@@ -59,7 +59,7 @@ public class PixyCamSim extends ASensorWrapper implements II2CWrapper, BufferCal
         }
     }
 
-    public void update(Robot aRobot) 
+    public synchronized void update(Robot aRobot) 
     {
         mBlocks.clear();
 
