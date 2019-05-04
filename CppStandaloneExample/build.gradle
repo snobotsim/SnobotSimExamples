@@ -1,3 +1,9 @@
+buildscript{
+    dependencies{
+        classpath files(System.getProperty("user.home") + '/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-7.2.0/SnobotSimulatorPlugin-2019-0.0.0.jar')
+    }
+}
+
 plugins {
     id "cpp"
     id "google-test-test-suite"

@@ -25,7 +25,7 @@ def check_versions(project):
     success = True
 
     expected_gradlerio_version = "2019.4.1"
-    expected_snobotsim_version = "2019-2.0.0"
+    expected_snobotsim_version = "2019-3.0.0"
     expected_wpilib_version = "2019.1.1"
 
     found_gradlerio_version = None
@@ -35,6 +35,13 @@ def check_versions(project):
     with open("build.gradle") as f:
         for line in f.readlines():
             line = line.strip()
+            if "buildscript" in line:
+                print("  Found build script, probably an intermediate build")
+                success = False
+            if "snobotSimCompile" in line:
+                print("  snobotSimCompile shouldn't be here anymore")
+                success = False
+                
             gradle_rio_success, found_gradlerio_version = check_regex(r"edu.wpi.first.GradleRIO.*?([0-9]+\.[0-9]+\.[0-9])\"", line, found_gradlerio_version)
             snobot_sim_plugin_success, found_snobotsim_plugin_version = check_regex(r"SnobotSimulatorPlugin.*?([0-9]+-[0-9]+\.[0-9]+\.[0-9]+)", line, found_snobotsim_plugin_version)
             wpilib_success, found_wpilib_version = check_regex(r"""wpilibVersion *=? *(?:'|")(.*)(?:'|")""", line, found_wpilib_version)
@@ -67,10 +74,6 @@ def main():
     gradle_command = "gradlew" if sys.platform == 'win32' else "./gradlew"
     for project in projects:
         print("Running project '" + project + "'")
-        
-        # TODO - temporary
-        if "CppWithGuiExample" in project:
-            continue
         
         os.chdir(project)
         if "cpp" in project.lower():

@@ -1,7 +1,12 @@
+buildscript{
+    dependencies{
+        classpath files(System.getProperty("user.home") + '/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-3.0.0/SnobotSimulatorPlugin-2019-3.0.0.jar')
+    }
+}
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.4.1"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-2.0.0" apply false
+//    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -59,6 +64,7 @@ sourceSets {
 }
 
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
+apply from: "snobotsim/snobot_sim.gradle"
 
 // End Snobot Sim
 /////////////////////////////////////////////////////
@@ -70,20 +76,6 @@ dependencies {
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-
-    // This is always required for SnobotSim to run
-    snobotSimCompile snobotSimJava()
-
-    // This is required only if you are adding a custom simulator.
-    simulatorExtensionsCompile snobotSimJava()
-    simulatorExtensionsCompile wpi.deps.wpilib()
-    simulatorExtensionsCompile sourceSets.main.output
-    snobotSimCompile sourceSets.simulatorExtensions.output
-    
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-    testCompile snobotSimJava()
-    testCompile sourceSets.simulatorExtensions.output
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

@@ -1,0 +1,20 @@
+
+
+dependencies {
+    // SnobotSim
+    snobotSimCompile snobotSimJava()
+
+    simulatorExtensionsCompile snobotSimJava()
+    simulatorExtensionsCompile wpi.deps.wpilib()
+    simulatorExtensionsCompile sourceSets.main.output
+    
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    
+    testCompile snobotSimJava()
+    testCompile sourceSets.simulatorExtensions.output
+}
+
+tasks.withType(Test) {
+    systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
+}
