@@ -8,7 +8,7 @@
 		"REVRobotics"
 	],
 	"snobot_sim": {
-		"version_number": "2019-7.2.0",
+		"version_number": "2019-2.0.0",
 		"libraries": {
 			"java": [
 				"com.snobot.simulator:snobot_sim_gui:${version_number}",

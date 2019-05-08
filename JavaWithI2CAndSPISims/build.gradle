@@ -1,12 +1,7 @@
-buildscript{
-    dependencies{
-        classpath files(System.getProperty("user.home") + '/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-3.0.0/SnobotSimulatorPlugin-2019-3.0.0.jar')
-    }
-}
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.4.1"
-//    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -50,22 +45,8 @@ repositories {
 
 /////////////////////////////////////////////////////
 // Snobot Sim
-
-
-// If you have your own simulator code, you must tell GradleRio that you want that code compiled.
-// The recommended way to do it is to create a new source set, just for this, and jar it up later
-sourceSets {
-    simulatorExtensions
-    {
-        java {
-            srcDirs += ["src/snobot_sim/java"]
-        }
-    }
-}
-
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
 apply from: "snobotsim/snobot_sim.gradle"
-
 // End Snobot Sim
 /////////////////////////////////////////////////////
 
@@ -88,10 +69,6 @@ jar {
 
 test {
     useJUnitPlatform()
-}
-
-tasks.withType(Test) {
-    systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
 }
 
 // This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,

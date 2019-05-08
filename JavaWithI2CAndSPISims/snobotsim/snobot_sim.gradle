@@ -1,5 +1,16 @@
 
 
+// If you have your own simulator code, you must tell GradleRio that you want that code compiled.
+// The recommended way to do it is to create a new source set, just for this, and jar it up later
+sourceSets {
+    simulatorExtensions
+    {
+        java {
+            srcDirs += ["src/snobot_sim/java"]
+        }
+    }
+}
+
 dependencies {
     // SnobotSim
     snobotSimCompile snobotSimJava()

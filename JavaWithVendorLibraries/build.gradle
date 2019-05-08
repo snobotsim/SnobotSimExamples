@@ -1,13 +1,7 @@
-buildscript{
-    dependencies{
-        classpath files(System.getProperty("user.home") + '/.m2/repository/com/snobot/simulator/plugin/SnobotSimulatorPlugin/2019-3.0.0/SnobotSimulatorPlugin-2019-3.0.0.jar')
-    }
-}
-
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.4.1"
-    //id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -53,10 +47,6 @@ repositories {
 // Snobot Sim
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
 apply from: "snobotsim/snobot_sim.gradle"
-
-// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
-// but since this is shared I have it in a more centralized location
-apply from: "../styleguide/java_style.gradle"
 // End Snobot Sim
 /////////////////////////////////////////////////////
 
@@ -76,3 +66,7 @@ jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
+
+// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
+// but since this is shared I have it in a more centralized location
+apply from: "../styleguide/java_style.gradle"

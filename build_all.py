@@ -64,8 +64,34 @@ def check_versions(project):
     return success
 
 
+def build_functor(project, gradle_command, use_shell):
+    failures = []
+    warnings = []
+
+    if "cpp" in project.lower():
+        subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
+    if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
+        failures.append(project)
+    elif not check_versions(project):
+        warnings.append(project)
+
+    return failures, warnings
+
+def clean_functor(project, gradle_command, use_shell):
+    failures = []
+    warnings = []
+    
+    if subprocess.call([gradle_command, "clean"], shell=use_shell) != 0:
+        failures.append(project)
+
+    return failures, warnings
+
+
 def main():
-	
+    
+    run_function = build_functor
+#     run_function = clean_functor
+
     projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git" and d != "build" and d != "styleguide"]
 
     failures = []
@@ -76,12 +102,10 @@ def main():
         print("Running project '" + project + "'")
         
         os.chdir(project)
-        if "cpp" in project.lower():
-            subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
-        if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
-            failures.append(project)
-        elif not check_versions(project):
-            warnings.append(project)
+        failure, warning = run_function(project, gradle_command, use_shell)
+        
+        failures.extend(failure)
+        warnings.extend(warning)
 
     print("Failed %s" % failures)
     print("Warnings %s" % warnings)
