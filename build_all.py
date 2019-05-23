@@ -25,7 +25,7 @@ def check_versions(project):
     success = True
 
     expected_gradlerio_version = "2019.4.1"
-    expected_snobotsim_version = "2019-2.0.0"
+    expected_snobotsim_version = "2019-3.0.0"
     expected_wpilib_version = "2019.1.1"
 
     found_gradlerio_version = None
@@ -35,6 +35,13 @@ def check_versions(project):
     with open("build.gradle") as f:
         for line in f.readlines():
             line = line.strip()
+            if "buildscript" in line:
+                print("  Found build script, probably an intermediate build")
+                success = False
+            if "snobotSimCompile" in line:
+                print("  snobotSimCompile shouldn't be here anymore")
+                success = False
+                
             gradle_rio_success, found_gradlerio_version = check_regex(r"edu.wpi.first.GradleRIO.*?([0-9]+\.[0-9]+\.[0-9])\"", line, found_gradlerio_version)
             snobot_sim_plugin_success, found_snobotsim_plugin_version = check_regex(r"SnobotSimulatorPlugin.*?([0-9]+-[0-9]+\.[0-9]+\.[0-9]+)", line, found_snobotsim_plugin_version)
             wpilib_success, found_wpilib_version = check_regex(r"""wpilibVersion *=? *(?:'|")(.*)(?:'|")""", line, found_wpilib_version)
@@ -57,8 +64,34 @@ def check_versions(project):
     return success
 
 
+def build_functor(project, gradle_command, use_shell):
+    failures = []
+    warnings = []
+
+    if "cpp" in project.lower():
+        subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
+    if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
+        failures.append(project)
+    elif not check_versions(project):
+        warnings.append(project)
+
+    return failures, warnings
+
+def clean_functor(project, gradle_command, use_shell):
+    failures = []
+    warnings = []
+    
+    if subprocess.call([gradle_command, "clean"], shell=use_shell) != 0:
+        failures.append(project)
+
+    return failures, warnings
+
+
 def main():
-	
+    
+    run_function = build_functor
+#     run_function = clean_functor
+
     projects = [os.path.abspath(d) for d in os.listdir('.') if os.path.isdir(d) and d != ".git" and d != "build" and d != "styleguide"]
 
     failures = []
@@ -68,17 +101,11 @@ def main():
     for project in projects:
         print("Running project '" + project + "'")
         
-        # TODO - temporary
-        if "CppWithGuiExample" in project:
-            continue
-        
         os.chdir(project)
-        if "cpp" in project.lower():
-            subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
-        if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
-            failures.append(project)
-        elif not check_versions(project):
-            warnings.append(project)
+        failure, warning = run_function(project, gradle_command, use_shell)
+        
+        failures.extend(failure)
+        warnings.extend(warning)
 
     print("Failed %s" % failures)
     print("Warnings %s" % warnings)

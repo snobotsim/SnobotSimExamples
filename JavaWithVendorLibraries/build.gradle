@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.4.1"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-2.0.0" apply false
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -46,10 +46,7 @@ repositories {
 /////////////////////////////////////////////////////
 // Snobot Sim
 apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
-
-// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
-// but since this is shared I have it in a more centralized location
-apply from: "../styleguide/java_style.gradle"
+apply from: "snobotsim/snobot_sim.gradle"
 // End Snobot Sim
 /////////////////////////////////////////////////////
 
@@ -60,9 +57,6 @@ dependencies {
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-    
-
-    snobotSimCompile snobotSimJava()
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -72,3 +66,7 @@ jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
+
+// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
+// but since this is shared I have it in a more centralized location
+apply from: "../styleguide/java_style.gradle"
