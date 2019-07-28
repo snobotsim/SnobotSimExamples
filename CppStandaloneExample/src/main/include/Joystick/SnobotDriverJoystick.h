@@ -24,13 +24,13 @@ public:
      *
      * @return Returns the right speed
      */
-    virtual double getRightSpeed();
+    virtual double getRightSpeed() override;
 
     /**
      *
      * @return Returns the left speed
      */
-    virtual double getLeftSpeed();
+    virtual double getLeftSpeed() override;
 
     ////////////////////////////////////////////
     // Joystick Overrides
