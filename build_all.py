@@ -68,6 +68,8 @@ def build_functor(project, gradle_command, use_shell):
     failures = []
     warnings = []
 
+    subprocess.call([gradle_command, "updateSnobotSimConfig"], shell=use_shell)
+ 
     if "cpp" in project.lower():
         subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
     if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:
