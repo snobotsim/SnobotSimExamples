@@ -7,64 +7,66 @@
 
 #include "Robot.h"
 
-#include <iostream>
+#include "Joystick/SnobotDriverJoystick.h"
+#include "Joystick/SnobotOperatorJoystick.h"
+#include "Climber/SnobotClimber.h"
+#include "Gearboss/SnobotGearBoss.h"
+#include "Drivetrain/SnobotDrivetrain.h"
+#include "Positioner/SnobotPositioner.h"
+#include "SnobotLib/Logger/SnobotLogger.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
+// WpiLib
+#include "frc/AnalogGyro.h"
+#include "frc/Talon.h"
 
-void Robot::RobotInit() {
-  m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-  m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+void Robot::RobotInit() 
+{
+    std::shared_ptr<ILogger> logger(new SnobotLogger);
+
+    ////////////////////////////////////////////////////////////
+    // Initialize joysticks
+    ////////////////////////////////////////////////////////////
+    std::shared_ptr<frc::Joystick> driverXbox(new frc::Joystick(0));
+    std::shared_ptr<frc::Joystick> operatorXbox(new frc::Joystick(1));
+
+    std::shared_ptr<IOperatorJoystick> operatorJoystick(new SnobotOperatorJoystick(operatorXbox));
+    std::shared_ptr<IDriverJoystick> driverJoystick(new SnobotDriverJoystick(driverXbox, logger));
+
+    ////////////////////////////////////////////////////////////
+    // Initialize subsystems
+    ////////////////////////////////////////////////////////////
+    std::shared_ptr<frc::SpeedController> driveLeftMotor(new frc::Talon(0));
+    std::shared_ptr<frc::SpeedController> driveRightMotor(new frc::Talon(1));
+    std::shared_ptr<frc::Encoder> driveLeftEncoder(new frc::Encoder(0, 1));
+    std::shared_ptr<frc::Encoder> driveRightEncoder(new frc::Encoder(2, 3));
+    mDrivetrain = std::shared_ptr<IDrivetrain>(new SnobotDrivetrain(driveLeftMotor, driveRightMotor, driverJoystick, driveLeftEncoder, driveRightEncoder));
+    addModule(mDrivetrain);
+
+    // Gearboss
+    std::shared_ptr<frc::DoubleSolenoid> gearSolenoid(new frc::DoubleSolenoid(0, 1));
+    mGearBoss = std::shared_ptr<SnobotGearBoss>(new SnobotGearBoss(gearSolenoid, operatorJoystick, logger));
+    addModule(mGearBoss);
+
+    // Climber
+    std::shared_ptr<frc::SpeedController> climberMotor(new frc::Talon(2));
+    mClimber = std::shared_ptr<SnobotClimber>(new SnobotClimber(climberMotor, operatorJoystick, logger));
+    addModule(mClimber);
+
+    // Positioner
+    std::shared_ptr<frc::Gyro> gyro(new frc::AnalogGyro(0));
+    mPositioner = std::shared_ptr<IPositioner>(new SnobotPositioner(mDrivetrain, gyro, logger));
+    addModule(mPositioner);
 }
 
-/**
- * This function is called every robot packet, no matter the mode. Use
- * this for items like diagnostics that you want ran during disabled,
- * autonomous, teleoperated and test.
- *
- * <p> This runs after the mode specific periodic functions, but before
- * LiveWindow and SmartDashboard integrated updating.
- */
-void Robot::RobotPeriodic() {}
 
-/**
- * This autonomous (along with the chooser code above) shows how to select
- * between different autonomous modes using the dashboard. The sendable chooser
- * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
- * remove all of the chooser code and uncomment the GetString line to get the
- * auto name from the text box below the Gyro.
- *
- * You can add additional auto modes by adding additional comparisons to the
- * if-else structure below with additional strings. If using the SendableChooser
- * make sure to add them to the chooser code above as well.
- */
-void Robot::AutonomousInit() {
-  m_autoSelected = m_chooser.GetSelected();
-  // m_autoSelected = SmartDashboard::GetString("Auto Selector",
-  //     kAutoNameDefault);
-  std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
-  }
-}
-
-void Robot::AutonomousPeriodic() {
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
-  }
-}
-
-void Robot::TeleopInit() {}
-
-void Robot::TeleopPeriodic() {}
-
-void Robot::TestPeriodic() {}
-
-#ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+#ifdef STANDALONE_SNOBOT_SIM
+    #include "SnobotSim/StartStandaloneSimulatorMacro.h"
+    // Note that the config path is up a couple directories, since it gets run from build/install/desktopProgram/release/libs
+    START_STANDALONE_SIMULATOR(Robot, SnobotSim::AStandaloneSimulator)
+#else
+    #ifndef RUNNING_FRC_TESTS
+    int main() { return frc::StartRobot<Robot>(); }
+    #endif
 #endif

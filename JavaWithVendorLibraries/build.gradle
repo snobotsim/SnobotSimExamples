@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.1.2"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-4.0.0" apply false
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -40,6 +41,13 @@ deploy {
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 
+/////////////////////////////////////////////////////
+// Snobot Sim
+apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
+apply from: "snobotsim/snobot_sim.gradle"
+// End Snobot Sim
+/////////////////////////////////////////////////////
+
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
@@ -66,3 +74,7 @@ jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
+
+// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
+// but since this is shared I have it in a more centralized location
+apply from: "../styleguide/java_style.gradle"

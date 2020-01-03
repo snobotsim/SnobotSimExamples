@@ -1,0 +1,68 @@
+!!com.snobot.simulator.config.v1.SimulatorConfigV1
+mAccelerometers: []
+mAnalogIn:
+- mHandle: 0
+  mName: Analog In 0
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiAnalogInWrapper
+mAnalogOut: []
+mDefaultI2CWrappers: {}
+mDefaultSpiWrappers: {}
+mDigitalIO:
+- mHandle: 0
+  mName: Drive Left (A)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 1
+  mName: Drive Left (B)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 2
+  mName: Drive Right (A)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 3
+  mName: Drive Right (B)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+mEncoders:
+- mConnectedSpeedControllerHandle: 0
+  mHandle: 0
+  mName: Drive Left
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper
+- mConnectedSpeedControllerHandle: 1
+  mHandle: 1
+  mName: Drive Right
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper
+mGyros:
+- mHandle: 0
+  mName: Gyro
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiAnalogGyroWrapper
+mPwm:
+- mHandle: 0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: -12.0
+  mName: Drive Left
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
+- mHandle: 1
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 12.0
+  mName: Drive Right
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
+- mHandle: 2
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 0.0
+  mName: Climber
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
+mRelays: []
+mSimulatorComponents:
+- !!com.snobot.simulator.simulator_components.config.TankDriveConfig
+  mGyroHandle: 0
+  mLeftMotorHandle: 0
+  mRightMotorHandle: 1
+  mTurnKp: 13.333
+mSolenoids:
+- mHandle: 0
+  mName: Gear (A)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper
+- mHandle: 1
+  mName: Gear (B)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper

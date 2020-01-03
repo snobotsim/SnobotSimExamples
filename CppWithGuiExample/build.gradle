@@ -1,7 +1,9 @@
 plugins {
     id "cpp"
+    id "java" // Required for GUI based SnobotSim
     id "google-test-test-suite"
     id "edu.wpi.first.GradleRIO" version "2020.1.2"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-4.0.0" apply false
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)

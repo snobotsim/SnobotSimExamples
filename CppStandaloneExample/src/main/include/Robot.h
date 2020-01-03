@@ -7,24 +7,23 @@
 
 #pragma once
 
-#include <string>
+#include "Drivetrain/IDrivetrain.h"
+#include "Gearboss/IGearBoss.h"
+#include "Climber/IClimber.h"
+#include "Positioner/IPositioner.h"
 
-#include <frc/TimedRobot.h>
-#include <frc/smartdashboard/SendableChooser.h>
+#include "SnobotLib/ASnobot.h"
 
-class Robot : public frc::TimedRobot {
- public:
-  void RobotInit() override;
-  void RobotPeriodic() override;
-  void AutonomousInit() override;
-  void AutonomousPeriodic() override;
-  void TeleopInit() override;
-  void TeleopPeriodic() override;
-  void TestPeriodic() override;
+class Robot: public ASnobot
+{
+public:
+    void RobotInit() override;
 
- private:
-  frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
+protected:
+
+    std::shared_ptr<IDrivetrain> mDrivetrain;
+    std::shared_ptr<IGearBoss> mGearBoss;
+    std::shared_ptr<IClimber> mClimber;
+    std::shared_ptr<IPositioner> mPositioner;
+
 };

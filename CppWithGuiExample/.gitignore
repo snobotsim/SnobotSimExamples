@@ -159,3 +159,8 @@ imgui.ini
 
 
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
+
+
+# SnobotSim
+simulator_config/joystick_config.properties
+logs/
