@@ -25,7 +25,7 @@ def check_versions(project):
     success = True
 
     expected_gradlerio_version = "2019.4.1"
-    expected_snobotsim_version = "2019-3.0.0"
+    expected_snobotsim_version = "2019-4.0.0"
     expected_wpilib_version = "2019.1.1"
 
     found_gradlerio_version = None
@@ -68,6 +68,8 @@ def build_functor(project, gradle_command, use_shell):
     failures = []
     warnings = []
 
+    subprocess.call([gradle_command, "updateSnobotSimConfig"], shell=use_shell)
+ 
     if "cpp" in project.lower():
         subprocess.call([gradle_command, "installRoboRioToolchain"], shell=use_shell)
     if subprocess.call([gradle_command, "build"], shell=use_shell) != 0:

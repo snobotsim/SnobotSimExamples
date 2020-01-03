@@ -29,14 +29,14 @@ public:
      *
      * @return distance in inches
      */
-    virtual double getRightDistance();
+    virtual double getRightDistance() override;
 
     /**
      * Request left encoder distance
      *
      * @return distance in inches
      */
-    virtual double getLeftDistance();
+    virtual double getLeftDistance() override;
 
     /**
      * Set left and right drive mode speed
@@ -46,10 +46,10 @@ public:
      * @param aRightSpeed
      *            Set motor speed between -1 and 1
      */
-    virtual void setLeftRightSpeed(double aLeftSpeed, double aRightSpeed);
+    virtual void setLeftRightSpeed(double aLeftSpeed, double aRightSpeed) override;
 
-    virtual double getLeftMotorSpeed();
-    virtual double getRightMotorSpeed();
+    virtual double getLeftMotorSpeed() override;
+    virtual double getRightMotorSpeed() override;
 
     ////////////////////////////////////////////
     // Subsystem Overrides

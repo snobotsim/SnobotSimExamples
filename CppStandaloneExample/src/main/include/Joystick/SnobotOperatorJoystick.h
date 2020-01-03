@@ -24,28 +24,28 @@ public:
      *
      * @return true if pressed
      */
-    virtual bool isCatchRope();
+    virtual bool isCatchRope() override;
 
     /**
      * Is the climb button pressed?
      *
      * @return true if pressed
      */
-    virtual bool isClimb();
+    virtual bool isClimb() override;
 
     /**
      * Is the green light toggle on?
      *
      * @return whether the green lights should be on
      */
-    virtual bool greenLightOn();
+    virtual bool greenLightOn() override;
 
     /**
      * Should the green light be on?
      *
      * @return True if the light should be on
      */
-    virtual bool blueLightOn();
+    virtual bool blueLightOn() override;
 
     /**
      * Returns UP if up button is pressed, DOWN, if down button is pressed, and
@@ -54,7 +54,7 @@ public:
      * @return UP to move Gear Boss up, DOWN to move Gear Boss down, and NONE to
      *         do nothing
      */
-    virtual GearBossPositions moveGearBossToPosition();
+    virtual GearBossPositions moveGearBossToPosition() override;
 
     /**
      * Indicates the joystick should be rumbling
@@ -62,7 +62,7 @@ public:
      * @param aRumble
      *            True to rumble
      */
-    virtual void setShouldRumble(bool aRumble);
+    virtual void setShouldRumble(bool aRumble) override;
 
     ////////////////////////////////////////////
     // Joystick Overrides
