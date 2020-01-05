@@ -39,7 +39,7 @@ deploy {
 }
 
 // Set this to true to enable desktop support.
-def includeDesktopSupport = false
+def includeDesktopSupport = true
 
 /////////////////////////////////////////////////////
 // Snobot Sim
