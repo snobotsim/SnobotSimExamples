@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.1.2"
-    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-4.0.0" apply false
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2020-0.0.0" apply false
 }
 
 sourceCompatibility = JavaVersion.VERSION_11

@@ -27,20 +27,20 @@ public:
     /**
      * Moves gear to its high position. This is to get the gear onto the peg.
      */
-    virtual void moveGearHigh();
+    virtual void moveGearHigh()  override;
 
     /**
      * This is to get the Gear Boss down and away from the gear. This is the
      * second part of the process of putting the gear on the peg.
      */
-    virtual void moveGearLow();
+    virtual void moveGearLow()  override;
 
     /**
      * This returns the position of the gear bucket.
      * 
      * @return true for gear high and false for gear low
      */
-    virtual bool isGearUp();
+    virtual bool isGearUp()  override;
 
     ////////////////////////////////////////////
     // Subsystem Overrides
